@@ -12,9 +12,9 @@ public class Product
     // 商品価格（0円以上）
     public int Price { get; private set; }
     // 商品カテゴリ（null不可）
-    public ProductCategory Category { get; private set; }
+    public ProductCategory? Category { get; private set; }
     // 在庫情報（null不可）
-    public ProductStock Stock { get; private set; }
+    public ProductStock? Stock { get; private set; }
 
     /// <summary>
     /// 再構築・復元用コンストラクタ（UUID指定）
@@ -34,6 +34,23 @@ public class Product
         Price = price;
         Category = category ?? throw new DomainException("カテゴリは必須です。");
         Stock = stock ?? throw new DomainException("在庫情報は必須です。");
+    }
+
+     /// <summary>
+    /// 再構築・復元用コンストラクタ（UUID指定）
+    /// </summary>
+    /// <param name="productUuid">商品UUID</param>
+    /// <param name="name">商品名</param>
+    /// <param name="price">価格</param>
+
+    public Product(string productUuid, string name, int price)
+    {
+        ValidateUuid(productUuid); // UUID形式検証
+        ProductUuid = productUuid;
+        ValidateName(name);        // 商品名検証
+        Name = name;
+        ValidatePrice(price);      // 価格検証
+        Price = price;
     }
 
     /// <summary>
