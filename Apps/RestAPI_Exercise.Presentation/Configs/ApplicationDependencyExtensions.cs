@@ -1,6 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using RestAPI_Exercise.Infrastructure.Contexts;
 using RestAPI_Exercise.Infrastructure.Adapters;
+using RestAPI_Exercise.Infrastructure.Repositories;
+using RestAPI_Exercise.Infrastructure.Shared;
+using RestAPI_Exercise.Application.Domains.Repositories;
+using RestAPI_Exercise.Application.Usecases;
 namespace RestAPI_Exercise.Presentation.Configs;
 /// <summary>
 /// 依存関係(DI)の設定
@@ -53,6 +57,15 @@ public static class ApplicationDependencyExtensions
         services.AddScoped<ProductCategoryEntityAdapter>();
         // ドメインオブジェクト:ProductとProductEntityの相互変換クラス
         services.AddScoped<ProductEntityAdapter>();
+        // 商品、商品カテゴリ、商品在庫オブジェクトの相互変換Factoryクラス
+        services.AddScoped<ProductFactory>();
+
+        // ドメインオブジェクト:商品カテゴリのCRUD操作Repositoryインターフェイス
+        services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+        // ドメインオブジェクト:商品のCRUD操作Repositoryインターフェイス
+        services.AddScoped<IProductRepository, ProductRepository>();
+        // Unit of Workパターンを利用したトランザクション制御インターフェイス
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
 
