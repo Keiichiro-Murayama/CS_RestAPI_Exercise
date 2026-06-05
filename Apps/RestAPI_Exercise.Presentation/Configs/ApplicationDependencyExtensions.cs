@@ -5,6 +5,8 @@ using RestAPI_Exercise.Infrastructure.Repositories;
 using RestAPI_Exercise.Infrastructure.Shared;
 using RestAPI_Exercise.Application.Domains.Repositories;
 using RestAPI_Exercise.Application.Usecases;
+using RestAPI_Exercise.Application.Usecases.Products.Interfaces;
+using RestAPI_Exercise.Application.Usecases.Products.Interactors;
 namespace RestAPI_Exercise.Presentation.Configs;
 /// <summary>
 /// 依存関係(DI)の設定
@@ -80,6 +82,9 @@ public static class ApplicationDependencyExtensions
     private static IServiceCollection AddApplicationLayerDependencies(
         this IServiceCollection services, IConfiguration config)
     {
+        services.AddScoped<IRegisterProductUsecase, RegisterProductUsecase>();
+        services.AddScoped<IUpdateProductUsecase, UpdateProductUsecase>();
+        services.AddScoped<ISearchProductByKeywordUsecase, SearchProductByKeywordUsecase>();
         return services;
     }
 
