@@ -4,6 +4,7 @@ using RestAPI_Exercise.Infrastructure.Contexts;
 using RestAPI_Exercise.Infrastructure.Adapters;
 using RestAPI_Exercise.Infrastructure.Repositories;
 using RestAPI_Exercise.Infrastructure.Shared;
+using RestAPI_Exercise.Infrastructure.Security;
 using RestAPI_Exercise.Application.Domains.Repositories;
 using RestAPI_Exercise.Application.Domains.Models;
 using RestAPI_Exercise.Application.Usecases;
@@ -78,6 +79,8 @@ public static class ApplicationDependencyExtensions
         services.AddScoped<UserEntityAdapter>();
         // ドメインオブジェクト:User(ユーザー)のCRUD操作インターフェイスの実装
         services.AddScoped<IUserRepository, UserRepository>();
+        // JWTの発行・検証インターフェイスの実装
+        services.AddSingleton<IJwtTokenProvider, JwtTokenProvider>();
 
         return services;
 
@@ -101,6 +104,8 @@ public static class ApplicationDependencyExtensions
         services.AddScoped<IPasswordHashingService, PBKDF2PasswordHashingService>();
         // ユースケース:[ユーザーを登録する]を実現するインターフェイス
         services.AddScoped<IRegisterUserUsecase, RegisterUserUsecase>();
+        // JwtSettingsをバインドしてDIに登録する
+        services.Configure<JwtSettings>(config.GetSection("JwtSettings"));
         return services;
     }
 
