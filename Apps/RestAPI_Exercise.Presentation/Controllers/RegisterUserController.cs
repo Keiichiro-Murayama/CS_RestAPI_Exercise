@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using RestAPI_Exercise.Application.Domains.Models;
 using RestAPI_Exercise.Application.Exceptions;
 using RestAPI_Exercise.Application.Usecases.Users.Interfaces;
@@ -30,15 +31,16 @@ public class RegisterUserController : ControllerBase
         _usecase = usecase;
         _adapter = adapter;
     }
+    [Authorize]
 
     [HttpGet("check")]
     [SwaggerOperation(Summary = "ユーザー名、メールアドレスの重複チェック",
-                      Description = "ユーザー名、メールアドレスの存在を検証する")]
+                  Description = "ユーザー名、メールアドレスの存在を検証する")]
     [SwaggerResponse(StatusCodes.Status200OK, "存在しない場合 { exists=false } を返す")]
     [SwaggerResponse(StatusCodes.Status409Conflict, "既に存在する場合")]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "ユーザー名、メールアドレスが未入力の場合")]
     public async Task<IActionResult> CheckDuplicate(
-        [FromQuery] string? username, [FromQuery, EmailAddress] string? email)
+    [FromQuery] string? username, [FromQuery, EmailAddress] string? email)
     {
         // ユーザー名もメールアドレスも入力?
         if (string.IsNullOrWhiteSpace(username) && string.IsNullOrWhiteSpace(email))
@@ -63,14 +65,15 @@ public class RegisterUserController : ControllerBase
     /// </summary>
     /// <param name="viewModel">ユースケース:[ユーザーを登録する]を実現するViewModel</param>
     /// <returns></returns>
+    [Authorize]
     [HttpPost]
     [SwaggerOperation(Summary = "ユーザーを登録",
-                      Description = "ユーザー情報を受け取り、ユーザーを登録する")]
+              Description = "ユーザー情報を受け取り、ユーザーを登録する")]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "バリデーションエラーまたは業務ルール違反")]
     [SwaggerResponse(StatusCodes.Status409Conflict, "ユーザーが既に存在する場合")]
     [SwaggerResponse(StatusCodes.Status201Created, "登録成功", typeof(User))]
     public async Task<IActionResult> Register(
-        [FromBody, SwaggerRequestBody("ユーザー登録用ViewModel", Required = true)]
+[FromBody, SwaggerRequestBody("ユーザー登録用ViewModel", Required = true)]
         RegisterUserViewModel viewModel)
     {
         // サーバーサイドバリデーション

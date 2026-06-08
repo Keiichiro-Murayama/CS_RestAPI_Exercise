@@ -1,4 +1,4 @@
-using System.Reflection;
+// using System.Reflection;
 using RestAPI_Exercise.Presentation.Configs;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,17 +7,26 @@ var builder = WebApplication.CreateBuilder(args);
 ApplicationDependencyExtensions
     .AddApplicationDependencies(builder.Services, builder.Configuration);
 
-// Swaggerを有効化する
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    // アノテーションを有効化（SwaggerTagやSwaggerResponseを反映）
-    c.EnableAnnotations();
+// // Swaggerを有効化する
+// builder.Services.AddEndpointsApiExplorer();
+// builder.Services.AddSwaggerGen(c =>
+// {
+//     // アノテーションを有効化（SwaggerTagやSwaggerResponseを反映）
+//     c.EnableAnnotations();
 
-    // XMLコメントをSwaggerに取り込む（<summary>などを反映）
-    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-});
+//     // XMLコメントをSwaggerに取り込む（<summary>などを反映）
+//     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+//     c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+// });
+
+// 依存関係(DI)の設定
+ApplicationDependencyExtensions
+    .AddApplicationDependencies(builder.Services, builder.Configuration);
+// JWT認証ミドルウェアをサービス登録する
+builder.Services.AddJwtAuthentication(builder.Configuration);
+// Swagger(Open API)のサービス登録する
+builder.Services.AddSwaggerWithJwt();
+
 
 // WebApplicationを生成する
 var app = builder.Build();
@@ -47,6 +56,8 @@ app.UseHsts();
 app.UseAuthentication();
 // 認可(Authorization)を有効化する
 app.UseAuthorization();
+
+
 
 // Controllerのルーティングを有効化
 app.MapControllers();

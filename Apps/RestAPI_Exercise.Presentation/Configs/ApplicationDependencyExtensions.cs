@@ -12,6 +12,8 @@ using RestAPI_Exercise.Application.Usecases.Products.Interfaces;
 using RestAPI_Exercise.Application.Usecases.Products.Interactors;
 using RestAPI_Exercise.Application.Usecases.Users.Interfaces;
 using RestAPI_Exercise.Application.Usecases.Users.Interactors;
+using RestAPI_Exercise.Application.Usecases.Authenticate.Interfaces;
+using RestAPI_Exercise.Application.Usecases.Authenticate.Interactors;
 using RestAPI_Exercise.Application.Security;
 using RestAPI_Exercise.Presentation.Adapters;
 namespace RestAPI_Exercise.Presentation.Configs;
@@ -106,6 +108,8 @@ public static class ApplicationDependencyExtensions
         services.AddScoped<IRegisterUserUsecase, RegisterUserUsecase>();
         // JwtSettingsをバインドしてDIに登録する
         services.Configure<JwtSettings>(config.GetSection("JwtSettings"));
+        // ユースケース:[ログインする]を実現するインターフェイス
+        services.AddScoped<IAuthenticateUserUsecase, AuthenticateUserUsecase>();
         return services;
     }
 

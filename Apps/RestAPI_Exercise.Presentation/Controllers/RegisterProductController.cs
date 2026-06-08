@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using RestAPI_Exercise.Application.Domains.Models;
 using RestAPI_Exercise.Application.Exceptions;
 using RestAPI_Exercise.Application.Usecases.Products.Interfaces;
@@ -33,8 +34,9 @@ public class RegisterProductController : ControllerBase
     /// 商品カテゴリ一覧の取得
     /// </summary>
     /// <returns></returns>
+    [Authorize]
     [HttpGet("categories")]
-    [SwaggerOperation(Summary = "商品カテゴリ一覧を取得", 
+    [SwaggerOperation(Summary = "商品カテゴリ一覧を取得",
                       Description = "登録可能なすべての商品カテゴリを返します。")]
     [SwaggerResponse(StatusCodes.Status200OK, "カテゴリ一覧", typeof(List<ProductCategory>))]
     public async Task<IActionResult> GetCategories()
@@ -48,9 +50,10 @@ public class RegisterProductController : ControllerBase
     /// </summary>
     /// <param name="categoryId">商品カテゴリId(UUID)</param>
     /// <returns>該当するカテゴリが存在すればOK(200)、存在しなければNotFound(404)</returns>
+    [Authorize]
     [HttpGet("categories/{categoryId}")]
-    [SwaggerOperation(Summary = "商品カテゴリの取得", 
-                      Description = "指定された商品カテゴリIdに一致する商品カテゴリを返します。")]
+    [SwaggerOperation(Summary = "商品カテゴリの取得",
+                  Description = "指定された商品カテゴリIdに一致する商品カテゴリを返します。")]
     [SwaggerResponse(StatusCodes.Status200OK, "商品カテゴリが見つかった場合", typeof(ProductCategory))]
     [SwaggerResponse(StatusCodes.Status404NotFound, "該当商品カテゴリが存在しない場合")]
     public async Task<IActionResult> GetCategoryById(string categoryId)
@@ -75,9 +78,11 @@ public class RegisterProductController : ControllerBase
     /// <returns>
     /// 存在しない場合:Ok(200)、存在する場合:Conflict(409) 
     /// </returns>
+
+    [Authorize]
     [HttpGet("validate")]
-    [SwaggerOperation(Summary = "商品名の存在確認", 
-                      Description = "商品名が既に存在するかを検証する")]
+    [SwaggerOperation(Summary = "商品名の存在確認",
+              Description = "商品名が既に存在するかを検証する")]
     [SwaggerResponse(StatusCodes.Status200OK, "存在しない場合 { exists=false } を返す")]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "商品名が未入力の場合")]
     [SwaggerResponse(StatusCodes.Status409Conflict, "商品名が既に存在する場合")]
@@ -108,16 +113,17 @@ public class RegisterProductController : ControllerBase
     /// </summary>
     /// <param name="model">商品登録用ViewModel</param>
     /// <returns></returns>
+    [Authorize]
     [HttpPost]
-    [SwaggerOperation(Summary = "新商品を登録", 
-                      Description = "商品情報を受け取り、商品を登録する")]
+    [SwaggerOperation(Summary = "新商品を登録",
+              Description = "商品情報を受け取り、商品を登録する")]
     [SwaggerResponse(StatusCodes.Status201Created, "登録成功", typeof(Product))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "バリデーションエラーまたは業務ルール違反")]
     [SwaggerResponse(StatusCodes.Status404NotFound, "カテゴリIdが存在しない場合")]
     [SwaggerResponse(StatusCodes.Status409Conflict, "商品が既に存在する場合")]
     public async Task<IActionResult> Register(
-        // SwaggerRequestBodyを追加
-        [FromBody, SwaggerRequestBody("新商品登録用ViewModel", Required = true)]
+// SwaggerRequestBodyを追加
+[FromBody, SwaggerRequestBody("新商品登録用ViewModel", Required = true)]
         RegisterProductViewModel model)
     {
         // サーバーサイドバリデーション
