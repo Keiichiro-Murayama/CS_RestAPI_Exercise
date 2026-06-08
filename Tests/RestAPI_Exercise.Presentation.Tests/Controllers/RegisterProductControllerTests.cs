@@ -180,7 +180,7 @@ public class RegisterProductControllerTests
     [TestMethod("商品名有無チェック:存在しない商品名の場合、OK(200)とfalseが返される")]
     public async Task ValidateProduct_ShouldReturnOk_WhenNotExists()
     {
-        var response = await _controller!.ValidateProduct("消しゴム");
+        var response = await _controller!.ValidateProduct("ビール");
         var ok = response as OkObjectResult;
         // nullでないことを検証する
         Assert.IsNotNull(ok);
@@ -276,7 +276,7 @@ public class RegisterProductControllerTests
     {
         var viewModel = new RegisterProductViewModel
         {
-            Name = "消しゴム",
+            Name = "三角定規",
             Price = 120,
             Stock = 10,
             CategoryId = "a1f70bb5-aac0-4f3e-95a9-712dc100a26d",

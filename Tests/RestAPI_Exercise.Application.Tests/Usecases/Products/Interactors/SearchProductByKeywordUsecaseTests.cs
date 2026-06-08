@@ -124,7 +124,7 @@ public class SearchProductByKeywordUsecaseTests
     [TestMethod("存在しない商品キーワードの場合、空のリストが返される")]
     public async Task ExecuteAsync_ShouldThrowNotFoundException_WhenKeywordDoesNotExist()
     {
-        var result = await _usecase!.ExecuteAsync("ゴム");
+        var result = await _usecase!.ExecuteAsync("缶");
         // nullでないことを検証する
         Assert.IsNotNull(result);
         // 件数が0件であることを検証する

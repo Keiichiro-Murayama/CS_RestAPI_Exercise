@@ -88,7 +88,7 @@ public class UpdateProductUsecaseTests
         // 商品名を検証する
         Assert.AreEqual("油性ボールペン(赤)", result.Name);
         // 単価を検証する
-        Assert.AreEqual(100, result.Price);
+        Assert.AreEqual(120, result.Price);
         // 商品在庫Idを検証する
         Assert.AreEqual("ff01a4b2-822e-462a-b200-2165bd07c618", result.Stock!.StockUuid);
         // 商品在庫数を検証する

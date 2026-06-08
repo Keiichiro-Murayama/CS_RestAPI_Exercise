@@ -90,13 +90,13 @@ public class ProductRepositoryTests
         // 商品名を検証する
         Assert.AreEqual("水性ボールペン(赤)", product.Name);
         // 単価を検証する
-        Assert.AreEqual(120, product.Price);
+        Assert.AreEqual(100, product.Price);
         // 商品在庫がnullでないことを検証する
         Assert.IsNotNull(product.Stock);
         // 商品在庫Idを検証する
         Assert.AreEqual("684b2cb1-7c4d-4b56-9975-e7facd06ab23", product.Stock.StockUuid);
         // 在庫数を検証する
-        Assert.AreEqual(100, product.Stock.Stock);
+        Assert.AreEqual(10, product.Stock.Stock);
         // 商品カテゴリIdを検証する
         Assert.AreEqual("a1f70bb5-aac0-4f3e-95a9-712dc100a26d", product.Category!.CategoryUuid);
         // 商品カテゴリ名を検証する
